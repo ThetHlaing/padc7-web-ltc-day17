@@ -15,12 +15,12 @@ class ArticleList extends React.Component {
     
     const articles = this.props.articles;
     const users = this.props.users;
-    console.log(articles);
     if(articles !== undefined){
       console.log(articles);
-      return articles.map((article, index) => {     
-        console.log('article',article);
+      return articles.map((article, index) => {  
+           
         const author = users.find(obj => obj.id === article.created_by);
+        console.log(users,author,article);
         return <Article key={index} article={article} author={author} />;
       });
     }

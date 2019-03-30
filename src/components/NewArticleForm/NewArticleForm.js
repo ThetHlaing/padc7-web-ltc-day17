@@ -5,8 +5,10 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { connect } from "react-redux";
+import { insertArticle } from '../../actions/articleActions';
 
-export default class NewArticleForm extends React.Component {
+class NewArticleForm extends React.Component {
   constructor(props) {
     super(props);
     this.title = React.createRef();
@@ -20,9 +22,11 @@ export default class NewArticleForm extends React.Component {
     event.preventDefault();
     const newArticle = {
       title: this.title.current.value,
-      content: this.content.current.value
+      content: this.content.current.value,
+      created_by : this.props.currentUser.id
     };
-    this.props.addNewArticleEvent(newArticle);
+    console.log(newArticle);
+    this.props.insertArticle(newArticle);
     this.setState({
       completeArticle: true
     });
@@ -44,3 +48,11 @@ export default class NewArticleForm extends React.Component {
     );
   }
 }
+
+
+
+const mapDispatchToProps = {
+  insertArticle
+}
+
+export default connect(null,mapDispatchToProps)(NewArticleForm);

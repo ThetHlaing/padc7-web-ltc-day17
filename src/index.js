@@ -55,17 +55,6 @@ class App extends React.Component {
     }
   };
 
-  addNewArticleEvent = article => {
-    const articles = this.state.articles;
-    //article.id = articles.length + 1;
-    
-    const mapped_article_id = articles.map(i => parseInt(i.id));
-    const max = Math.max(mapped_article_id);    
-    article.id = max + 1;
-    article.created_by = this.state.user.id;
-    articles.push(article);
-    this.setStateAndLocalStorage("articles", articles);
-  };
 
   deleteArticleEvent = (id,cb) =>{
     const articles = this.state.articles;
@@ -145,7 +134,7 @@ class App extends React.Component {
               this.state.isLogin ? (
                 <NewArticleForm
                   {...props}
-                  addNewArticleEvent={this.addNewArticleEvent}
+                  currentUser = {this.state.user}
                 />
               ) : (
                 <Redirect

@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 export default class Article extends React.Component {
   render() {
-    console.log(this.props.article)
     return (
       <React.Fragment>
         <h2>

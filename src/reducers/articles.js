@@ -4,9 +4,10 @@ const articles = (state = [], action) => {
       return [
         ...state,
         {
-          id: action.id,
-          title: action.title,
-          content : action.content
+          id: action.article.id,
+          title: action.article.title,
+          content : action.article.content,
+          created_by : action.article.created_by
         }
       ];
       case 'FETCH_ARTICLES':
