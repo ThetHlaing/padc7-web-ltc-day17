@@ -52,7 +52,11 @@ class App extends React.Component {
 
   addNewArticleEvent = article => {
     const articles = this.state.articles;
-    article.id = articles.length + 1;
+    //article.id = articles.length + 1;
+    
+    const mapped_article_id = articles.map(i => parseInt(i.id));
+    const max = Math.max(mapped_article_id);    
+    article.id = max + 1;
     article.created_by = this.state.user.id;
     articles.push(article);
     this.setStateAndLocalStorage("articles", articles);
