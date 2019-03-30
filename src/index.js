@@ -15,6 +15,11 @@ import ArticleList from "./components/ArticleList";
 import ArticleDetail from "./components/ArticleDetail";
 import DeleteArticle from "./components/DeleteArticle";
 
+import { createStore,applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from './reducers';
+import thunk from 'redux-thunk';
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -111,89 +116,91 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <div className="App">
-          <h1>Welcome to My Blog!</h1>
-          <Link to="/">Home</Link> | <Link to="/login">SignIn</Link>
-          {this.state.isLogin && (
-            <React.Fragment>
-              | <Link to="/article/new">New Article</Link>
-            </React.Fragment>
-          )}
-          <br />
-        </div>
-        <Route
-          path="/register"
-          render={props => (
-            <RegisterForm {...props} registerEvent={this.registerEvent} />
-          )}
-        />
-        <Route
-          path="/login"
-          render={props => (
-            <LoginForm {...props} loginEvent={this.loginEvent} />
-          )}
-        />
-        <Route
-          path="/article/new"
-          render={props =>
-            this.state.isLogin ? (
-              <NewArticleForm
+        <Router>
+          <div className="App">
+            <h1>Welcome to My Blog!</h1>
+            <Link to="/">Home</Link> | <Link to="/login">SignIn</Link>
+            {this.state.isLogin && (
+              <React.Fragment>
+                | <Link to="/article/new">New Article</Link>
+              </React.Fragment>
+            )}
+            <br />
+          </div>
+          <Route
+            path="/register"
+            render={props => (
+              <RegisterForm {...props} registerEvent={this.registerEvent} />
+            )}
+          />
+          <Route
+            path="/login"
+            render={props => (
+              <LoginForm {...props} loginEvent={this.loginEvent} />
+            )}
+          />
+          <Route
+            path="/article/new"
+            render={props =>
+              this.state.isLogin ? (
+                <NewArticleForm
+                  {...props}
+                  addNewArticleEvent={this.addNewArticleEvent}
+                />
+              ) : (
+                <Redirect
+                  to={{
+                    pathname: "/login",
+                    state: { from: props.location }
+                  }}
+                />
+              )
+            }
+          />
+
+          <Route
+            path="/articles/:id"
+            exact
+            render={props => (
+              <ArticleDetail
                 {...props}
-                addNewArticleEvent={this.addNewArticleEvent}
+                articles={this.state.articles}
+                users={this.state.users}
+                currentUser = {this.state.user}
               />
-            ) : (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: { from: props.location }
-                }}
+            )}
+          />
+
+          <Route
+            path="/articles/delete/:id"
+            exact
+            render={props => (
+              <DeleteArticle
+                {...props}
+                articles={this.state.articles}
+                users={this.state.users}
+                currentUser = {this.state.user}
+                deleteArticleEvent = {this.deleteArticleEvent}
               />
-            )
-          }
-        />
-
-        <Route
-          path="/articles/:id"
-          exact
-          render={props => (
-            <ArticleDetail
-              {...props}
-              articles={this.state.articles}
-              users={this.state.users}
-              currentUser = {this.state.user}
-            />
-          )}
-        />
-
-        <Route
-          path="/articles/delete/:id"
-          exact
-          render={props => (
-            <DeleteArticle
-              {...props}
-              articles={this.state.articles}
-              users={this.state.users}
-              currentUser = {this.state.user}
-              deleteArticleEvent = {this.deleteArticleEvent}
-            />
-          )}
-        />
+            )}
+          />
 
 
-        <Route
-          path="/"
-          exact
-          render={props => (
-            <ArticleList
-              articles={this.state.articles}
-              users={this.state.users}
-            />
-          )}
-        />
-      </Router>
+          <Route
+            path="/"
+            exact
+            component={ArticleList}            
+          />
+        </Router>
     );
   }
 }
+
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+const store = createStore(rootReducer,applyMiddleware(thunk))  ;
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement
+);
