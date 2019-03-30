@@ -4,7 +4,7 @@ export const fetchArticles = () => dispatch => {
   const articles = retrieveData('articles');
   dispatch({
     type: 'FETCH_ARTICLES',
-    payload : articles
+    data : articles
   });
 };
 

@@ -15,7 +15,7 @@ import ArticleList from "./components/ArticleList";
 import ArticleDetail from "./components/ArticleDetail";
 import DeleteArticle from "./components/DeleteArticle";
 
-import { createStore,applyMiddleware } from "redux";
+import { createStore } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from './reducers';
 import thunk from 'redux-thunk';
